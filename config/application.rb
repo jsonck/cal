@@ -39,6 +39,9 @@ module Cal
     # Tell Zeitwerk to ignore the API directory entirely (we manually load it in routes.rb)
     Rails.autoloaders.main.ignore("#{root}/app/api")
 
+    # Load middleware
+    require_relative '../app/middleware/redirect_www'
+
     # Redirect www to non-www domain
     config.middleware.use RedirectWww
 
