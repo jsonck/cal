@@ -1,0 +1,23 @@
+export CLOUDSDK_CORE_PROJECT="900232055160"
+
+alias rs='rvm use 3.2.1 ; rails s -p 4036'
+alias rc='rvm use 3.2.1 ; rails c'
+alias ng='rvm use 3.2.1 ; ./ngrok http --config ./ngrok.yml --subdomain pcdev 4036'
+alias l='osascript launch.scpt'
+alias hero='c https://dashboard.heroku.com/apps/popconvert'
+alias config='chrome https://dashboard.heroku.com/apps/popconvert/settings'
+alias setup="chrome https://partners.shopify.com/451415/apps/4549373/edit"
+alias devstore="chrome https://partners.shopify.com/451415/apps/4855375/test"
+alias d='chrome https://dashboard.heroku.com/apps/popconvert/deploy/github'
+alias k='chrome https://api.pop-convert.com/jrbsidekiq/queues'
+alias kibana="chrome https://pc-prod.kb.us-east-1.aws.found.io:9243/"
+alias marketing="chrome https://docs.google.com/spreadsheets/d/1CRWB7HwIXt7GQ6PI0-KzH1iyYw-qL9lY2P96e8GCytk/edit#gid=0"
+alias ip="ruby set_ip.rb"
+alias jason="chrome https://docs.google.com/spreadsheets/d/10TEUtrHXbLNy9AtkaEcaxQMwSC1o9bFg9uTc0W4kpSI/edit#gid=1968523127"
+
+
+
+alias bounce='open "https://pc-prod.kb.us-east-1.aws.found.io:9243/app/dashboards#/view/3f3609a0-aebe-11ef-a692-8f1d339f6f77?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1h,to:now))"'
+
+
+alias alerts='open "https://pc-prod.kb.us-east-1.aws.found.io:9243/app/security/alerts?sourcerer=(default:(id:security-solution-default,selectedPatterns:!(.alerts-security.alerts-default)))&timerange=(global:(linkTo:!(timeline),timerange:(from:%272024-11-29T05:00:00.000Z%27,fromStr:now%2Fd,kind:relative,to:%272024-11-30T04:59:59.999Z%27,toStr:now%2Fd)),timeline:(linkTo:!(global),timerange:(from:%272024-11-29T05:00:00.000Z%27,fromStr:now%2Fd,kind:relative,to:%272024-11-30T04:59:59.999Z%27,toStr:now%2Fd)))"'

@@ -1,0 +1,147 @@
+<div class="container">
+  <div class="header">
+    <h1>Google Calendar Reminder App</h1>
+    <p>Never miss an event with automatic email reminders 1 hour before</p>
+  </div>
+
+  <% if @user %>
+    <div class="user-section">
+      <h2>Welcome, <%= @user.email %>!</h2>
+      <p>Your calendar is synced and reminders are active.</p>
+      <%= button_to "Sign Out", logout_path, method: :delete, class: "btn btn-secondary" %>
+    </div>
+
+    <div class="events-section">
+      <h3>Upcoming Events</h3>
+      <% if @events.any? %>
+        <ul class="events-list">
+          <% @events.each do |event| %>
+            <li class="event-item">
+              <div class="event-title"><%= event.summary %></div>
+              <div class="event-time">
+                <%= event.start_time.strftime("%A, %B %d at %I:%M %p") %>
+              </div>
+              <div class="event-status">
+                <%= event.reminder_sent? ? "✓ Reminder sent" : "⏰ Reminder pending" %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No upcoming events found.</p>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="auth-section">
+      <h2>Get Started</h2>
+      <p>Connect your Google Calendar to start receiving email reminders</p>
+      <%= link_to "Sign in with Google", "/auth/google_oauth2", method: :post, class: "btn btn-primary" %>
+    </div>
+
+    <div class="features">
+      <h3>Features</h3>
+      <ul>
+        <li>Automatic email reminders 1 hour before each event</li>
+        <li>Secure OAuth2 authentication with Google</li>
+        <li>Read-only access to your calendar</li>
+        <li>Automatic sync every 6 hours</li>
+      </ul>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .header h1 {
+    color: #4285f4;
+    margin-bottom: 10px;
+  }
+
+  .header p {
+    color: #666;
+    font-size: 18px;
+  }
+
+  .user-section, .auth-section, .events-section, .features {
+    background: #f9f9f9;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .btn-primary {
+    background-color: #4285f4;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: #357ae8;
+  }
+
+  .btn-secondary {
+    background-color: #666;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #555;
+  }
+
+  .events-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .event-item {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-left: 4px solid #4285f4;
+    border-radius: 4px;
+  }
+
+  .event-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .event-time {
+    color: #666;
+    margin-bottom: 5px;
+  }
+
+  .event-status {
+    color: #4285f4;
+    font-size: 14px;
+  }
+
+  .features ul {
+    line-height: 2;
+  }
+</style>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        background-color: #4285f4;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px 5px 0 0;
+      }
+      .content {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 0 0 5px 5px;
+      }
+      .event-details {
+        background-color: white;
+        padding: 15px;
+        margin: 15px 0;
+        border-left: 4px solid #4285f4;
+      }
+      .time {
+        font-size: 18px;
+        font-weight: bold;
+        color: #4285f4;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Calendar Event Reminder</h1>
+      </div>
+      <div class="content">
+        <p>Hi <%= @user.email %>,</p>
+
+        <p>This is a reminder that you have an upcoming event in 1 hour:</p>
+
+        <div class="event-details">
+          <h2><%= @event.summary %></h2>
+          <p class="time">
+            <%= @event.start_time.strftime("%A, %B %d, %Y at %I:%M %p") %>
+          </p>
+          <% if @event.end_time %>
+            <p>
+              Ends: <%= @event.end_time.strftime("%I:%M %p") %>
+            </p>
+          <% end %>
+        </div>
+
+        <p>Best regards,<br/>
+        Calendar Reminder Team</p>
+      </div>
+    </div>
+  </body>
+</html>

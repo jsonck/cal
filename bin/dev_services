@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+
+# Development services launcher
+# This script helps you start all required services for development
+
+echo "📅 Calendar Reminder App - Development Services"
+echo ""
+
+show_help() {
+  echo "Usage: bin/dev_services [command]"
+  echo ""
+  echo "Commands:"
+  echo "  all       - Show status of all services (default)"
+  echo "  redis     - Start Redis server"
+  echo "  sidekiq   - Start Sidekiq worker"
+  echo "  rails     - Start Rails server"
+  echo "  mailcatcher - Start Mailcatcher (for testing emails)"
+  echo "  help      - Show this help message"
+  echo ""
+  echo "Example workflow:"
+  echo "  Terminal 1: bin/dev_services redis"
+  echo "  Terminal 2: bin/dev_services sidekiq"
+  echo "  Terminal 3: bin/dev_services rails"
+  echo "  Terminal 4: bin/dev_services mailcatcher (optional)"
+}
+
+check_redis() {
+  if redis-cli ping > /dev/null 2>&1; then
+    echo "✅ Redis is running"
+    return 0
+  else
+    echo "❌ Redis is not running"
+    return 1
+  fi
+}
+
+start_redis() {
+  echo "🚀 Starting Redis..."
+  redis-server
+}
+
+start_sidekiq() {
+  if ! check_redis; then
+    echo "⚠️  Redis must be running first!"
+    exit 1
+  fi
+  echo "🚀 Starting Sidekiq..."
+  bundle exec sidekiq -C config/sidekiq.yml
+}
+
+start_rails() {
+  echo "🚀 Starting Rails server..."
+  echo "Visit: http://localhost:3000"
+  bundle exec rails server
+}
+
+start_mailcatcher() {
+  if ! command -v mailcatcher &> /dev/null; then
+    echo "⚠️  Mailcatcher not installed"
+    echo "Install with: gem install mailcatcher"
+    exit 1
+  fi
+  echo "🚀 Starting Mailcatcher..."
+  echo "Web interface: http://localhost:1080"
+  mailcatcher
+}
+
+show_status() {
+  echo "Service Status:"
+  echo ""
+  check_redis
+
+  if pgrep -f sidekiq > /dev/null; then
+    echo "✅ Sidekiq is running"
+  else
+    echo "❌ Sidekiq is not running"
+  fi
+
+  if lsof -Pi :3000 -sTCP:LISTEN -t > /dev/null; then
+    echo "✅ Rails server is running"
+  else
+    echo "❌ Rails server is not running"
+  fi
+
+  if lsof -Pi :1080 -sTCP:LISTEN -t > /dev/null; then
+    echo "✅ Mailcatcher is running"
+  else
+    echo "❌ Mailcatcher is not running"
+  fi
+
+  echo ""
+  echo "Run 'bin/dev_services help' for more options"
+}
+
+case "${1:-all}" in
+  redis)
+    start_redis
+    ;;
+  sidekiq)
+    start_sidekiq
+    ;;
+  rails)
+    start_rails
+    ;;
+  mailcatcher)
+    start_mailcatcher
+    ;;
+  all)
+    show_status
+    ;;
+  help)
+    show_help
+    ;;
+  *)
+    echo "Unknown command: $1"
+    show_help
+    exit 1
+    ;;
+esac

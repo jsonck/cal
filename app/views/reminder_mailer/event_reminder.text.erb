@@ -1,0 +1,12 @@
+Hi <%= @user.email %>,
+
+This is a reminder that you have an upcoming event in 1 hour:
+
+Event: <%= @event.summary %>
+Time: <%= @event.start_time.strftime("%A, %B %d, %Y at %I:%M %p") %>
+<% if @event.end_time %>
+Ends: <%= @event.end_time.strftime("%I:%M %p") %>
+<% end %>
+
+Best regards,
+Calendar Reminder Team

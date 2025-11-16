@@ -1,0 +1,15 @@
+:concurrency: 5
+:queues:
+  - default
+  - mailers
+
+:schedule:
+  check_reminders:
+    cron: '*/15 * * * *' # Every 15 minutes
+    class: CheckRemindersJob
+    description: "Check for events that need reminders"
+
+  sync_all_calendars:
+    cron: '0 */6 * * *' # Every 6 hours
+    class: SyncAllCalendarsJob
+    description: "Sync calendars for all users"
