@@ -42,7 +42,7 @@ if [ $FIGARO == true ]; then
   figaro heroku:set -e production
 fi
 
-ruby '/Users/ck/sites/shared/shared.rb'
+# ruby '/Users/ck/sites/shared/shared.rb'
 
 echo "$SPACER""COMMITING NEW CHANGES""$BREAKER";
 git add .; git commit -m "$MESSAGE";
