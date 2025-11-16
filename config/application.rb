@@ -39,6 +39,9 @@ module Cal
     # Tell Zeitwerk to ignore the API directory entirely (we manually load it in routes.rb)
     Rails.autoloaders.main.ignore("#{root}/app/api")
 
+    # Redirect www to non-www domain
+    config.middleware.use RedirectWww
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end
