@@ -52,7 +52,7 @@ git add .; git commit -m "$MESSAGE";
 # WHEN IT'S WRAPPED IN QUOTATIONS, IT WILL JUST BE AN EMPTY STRING INSTEAD?
 if [ "$COMMITONLY" != true ]; then
   echo "$SPACER""DEPLOYING TO GITHUB THEN HEROKU ""$BREAKER";
-  git push origin master
+  git push origin main
   heroku restart
   #git push bitbucket master
 
