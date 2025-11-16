@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_16_145425) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_16_180113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_16_145425) do
     t.index ["user_id"], name: "index_calendar_events_on_user_id"
   end
 
+  create_table "event_reminders", force: :cascade do |t|
+    t.bigint "calendar_event_id", null: false
+    t.integer "minutes_before", null: false
+    t.boolean "sent", default: false, null: false
+    t.string "notification_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_event_id", "minutes_before"], name: "index_event_reminders_on_calendar_event_id_and_minutes_before"
+    t.index ["calendar_event_id"], name: "index_event_reminders_on_calendar_event_id"
+    t.index ["sent", "created_at"], name: "index_event_reminders_on_sent_and_created_at"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "google_id"
@@ -36,6 +48,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_16_145425) do
     t.datetime "token_expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "phone_number"
+    t.boolean "sms_enabled", default: false
+    t.string "notification_method", default: "both"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_id"], name: "index_users_on_google_id", unique: true
   end
@@ -55,5 +70,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_16_145425) do
   end
 
   add_foreign_key "calendar_events", "users"
+  add_foreign_key "event_reminders", "calendar_events"
   add_foreign_key "watches", "users"
 end

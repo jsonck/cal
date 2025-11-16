@@ -35,6 +35,9 @@ gem "omniauth-rails_csrf_protection"
 gem "sidekiq"
 gem "sidekiq-scheduler"
 
+# Twilio for SMS
+gem "twilio-ruby"
+
 # Environment variables
 gem "dotenv-rails", groups: [:development, :test]
 

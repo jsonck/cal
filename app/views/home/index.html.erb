@@ -1,32 +1,110 @@
 <div class="container">
   <div class="header">
     <h1>Google Calendar Reminder App</h1>
-    <p>Never miss an event with automatic email reminders 1 hour before</p>
+    <p>Never miss an event with customizable email and SMS reminders</p>
   </div>
 
   <% if @user %>
     <div class="user-section">
       <h2>Welcome, <%= @user.email %>!</h2>
       <p>Your calendar is synced and reminders are active.</p>
-      <%= button_to "Sign Out", logout_path, method: :delete, class: "btn btn-secondary" %>
+      <div style="margin-top: 1rem;">
+        <%= link_to "⚙️ Notification Settings", settings_path, class: "btn btn-settings" %>
+        <%= button_to "Sign Out", logout_path, method: :delete, class: "btn btn-secondary", style: "margin-left: 1rem;" %>
+      </div>
     </div>
 
     <div class="events-section">
       <h3>Upcoming Events</h3>
       <% if @events.any? %>
-        <ul class="events-list">
-          <% @events.each do |event| %>
-            <li class="event-item">
+        <% @events.each do |event| %>
+          <div class="event-card">
+            <div class="event-header">
               <div class="event-title"><%= event.summary %></div>
               <div class="event-time">
                 <%= event.start_time.strftime("%A, %B %d at %I:%M %p") %>
               </div>
-              <div class="event-status">
-                <%= event.reminder_sent? ? "✓ Reminder sent" : "⏰ Reminder pending" %>
-              </div>
-            </li>
-          <% end %>
-        </ul>
+            </div>
+
+            <div class="reminders-section">
+              <h4>Reminders for this event (<%= event.event_reminders.count %>/4)</h4>
+
+              <% if event.event_reminders.any? %>
+                <ul class="reminders-list">
+                  <% event.event_reminders.order(:minutes_before).each do |reminder| %>
+                    <li class="reminder-item">
+                      <span class="reminder-time">
+                        <%= reminder.minutes_before %> minutes before
+                      </span>
+                      <span class="reminder-type <%= reminder.notification_type %>">
+                        <%= reminder.notification_type.titleize %>
+                      </span>
+                      <span class="reminder-status">
+                        <%= reminder.sent? ? '✓ Sent' : '⏰ Pending' %>
+                      </span>
+                      <% unless reminder.sent? %>
+                        <%= button_to "Remove", event_reminder_path(event, reminder),
+                            method: :delete,
+                            class: "btn-remove",
+                            data: { confirm: 'Are you sure?' },
+                            style: "display: inline-block; background: #dc3545; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 0.5rem;" %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <p style="color: #666; font-style: italic;">No reminders set for this event.</p>
+              <% end %>
+
+              <% if event.event_reminders.count < 4 %>
+                <div class="add-reminder-form">
+                  <%= form_with(url: event_reminders_path(event), method: :post, local: true, style: "margin-top: 1rem;") do |f| %>
+                    <div style="display: flex; gap: 1rem; align-items: end;">
+                      <div style="flex: 1;">
+                        <%= f.label :minutes_before, "Remind me", style: "display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 14px;" %>
+                        <%= f.select :minutes_before,
+                            [
+                              ['5 minutes before', 5],
+                              ['10 minutes before', 10],
+                              ['15 minutes before', 15],
+                              ['30 minutes before', 30],
+                              ['1 hour before', 60],
+                              ['2 hours before', 120],
+                              ['3 hours before', 180],
+                              ['6 hours before', 360],
+                              ['12 hours before', 720],
+                              ['1 day before', 1440]
+                            ],
+                            {},
+                            class: "form-control",
+                            style: "width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" %>
+                      </div>
+
+                      <div style="flex: 1;">
+                        <%= f.label :notification_type, "Send via", style: "display: block; margin-bottom: 0.5rem; font-weight: bold; font-size: 14px;" %>
+                        <%= f.select :notification_type,
+                            [['Email', 'email'], ['SMS', 'sms'], ['Both', 'both']],
+                            { selected: @user.notification_method },
+                            class: "form-control",
+                            style: "width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" %>
+                      </div>
+
+                      <div>
+                        <%= f.submit "Add Reminder",
+                            class: "btn btn-primary",
+                            style: "background: #28a745; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;" %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <p style="margin-top: 1rem; color: #856404; background: #fff3cd; padding: 0.75rem; border-radius: 4px; font-size: 14px;">
+                  Maximum of 4 reminders per event reached.
+                </p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
       <% else %>
         <p>No upcoming events found.</p>
       <% end %>
@@ -34,17 +112,19 @@
   <% else %>
     <div class="auth-section">
       <h2>Get Started</h2>
-      <p>Connect your Google Calendar to start receiving email reminders</p>
+      <p>Connect your Google Calendar to start receiving customizable reminders</p>
       <%= link_to "Sign in with Google", "/auth/google_oauth2", method: :post, class: "btn btn-primary" %>
     </div>
 
     <div class="features">
       <h3>Features</h3>
       <ul>
-        <li>Automatic email reminders 1 hour before each event</li>
-        <li>Secure OAuth2 authentication with Google</li>
-        <li>Read-only access to your calendar</li>
-        <li>Automatic sync every 6 hours</li>
+        <li>📧 Email and SMS reminders</li>
+        <li>⏰ Customizable reminder times (1-60 minutes, 1-24 hours)</li>
+        <li>🔢 Up to 4 reminders per event</li>
+        <li>🔄 Real-time webhook updates</li>
+        <li>🔒 Secure OAuth2 authentication with Google</li>
+        <li>👁️ Read-only access to your calendar</li>
       </ul>
     </div>
   <% end %>
@@ -52,10 +132,10 @@
 
 <style>
   .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
   }
 
   .header {
@@ -111,34 +191,98 @@
     background-color: #555;
   }
 
-  .events-list {
-    list-style: none;
-    padding: 0;
+  .btn-settings {
+    background-color: #17a2b8;
+    color: white;
   }
 
-  .event-item {
+  .btn-settings:hover {
+    background-color: #138496;
+  }
+
+  .event-card {
     background: white;
-    padding: 15px;
-    margin: 10px 0;
+    padding: 20px;
+    margin: 15px 0;
     border-left: 4px solid #4285f4;
-    border-radius: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .event-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
   }
 
   .event-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #333;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
   }
 
   .event-time {
     color: #666;
-    margin-bottom: 5px;
+    font-size: 16px;
   }
 
-  .event-status {
-    color: #4285f4;
+  .reminders-section h4 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+
+  .reminders-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+  }
+
+  .reminder-item {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
     font-size: 14px;
+  }
+
+  .reminder-time {
+    font-weight: 600;
+    color: #333;
+    min-width: 140px;
+  }
+
+  .reminder-type {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .reminder-type.email {
+    background: #e3f2fd;
+    color: #1976d2;
+  }
+
+  .reminder-type.sms {
+    background: #e8f5e9;
+    color: #388e3c;
+  }
+
+  .reminder-type.both {
+    background: #fff3e0;
+    color: #f57c00;
+  }
+
+  .reminder-status {
+    color: #666;
+    font-size: 13px;
+    margin-left: auto;
   }
 
   .features ul {

@@ -4,6 +4,8 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: true
   validates :google_id, presence: true, uniqueness: true
+  validates :phone_number, format: { with: /\A\+?[1-9]\d{1,14}\z/, message: "must be a valid phone number" }, allow_blank: true
+  validates :notification_method, inclusion: { in: %w[email sms both] }, allow_nil: true
 
   def token_expired?
     token_expires_at.nil? || token_expires_at <= Time.current

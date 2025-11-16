@@ -1,0 +1,77 @@
+<div class="settings-container" style="max-width: 600px; margin: 2rem auto; padding: 0 1rem;">
+  <h1>Notification Settings</h1>
+
+  <% if notice %>
+    <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+      <%= notice %>
+    </div>
+  <% end %>
+
+  <% if alert %>
+    <div class="alert alert-danger" style="background: #f8d7da; color: #721c24; padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+      <%= alert %>
+    </div>
+  <% end %>
+
+  <%= form_with(model: @user, url: settings_path, method: :patch, local: true) do |f| %>
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+      <%= f.label :phone_number, "Phone Number (with country code, e.g., +14155551234)" %>
+      <%= f.text_field :phone_number,
+          class: "form-control",
+          placeholder: "+14155551234",
+          style: "width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" %>
+      <small style="color: #666; font-size: 0.875rem;">Include country code (e.g., +1 for US)</small>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+      <%= f.label :notification_method, "How would you like to receive reminders?" %>
+      <%= f.select :notification_method,
+          [['Email Only', 'email'], ['SMS Only', 'sms'], ['Both Email and SMS', 'both']],
+          {},
+          class: "form-control",
+          style: "width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid #ddd; border-radius: 4px;" %>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+      <label style="display: flex; align-items: center; cursor: pointer;">
+        <%= f.check_box :sms_enabled, style: "margin-right: 0.5rem; width: 18px; height: 18px;" %>
+        <span>Enable SMS notifications</span>
+      </label>
+      <small style="color: #666; font-size: 0.875rem;">You must provide a valid phone number to enable SMS</small>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "Save Settings",
+          class: "btn btn-primary",
+          style: "background: #007bff; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem;" %>
+      <%= link_to "Back to Home", root_path,
+          style: "margin-left: 1rem; color: #007bff; text-decoration: none;" %>
+    </div>
+  <% end %>
+
+  <hr style="margin: 2rem 0; border: none; border-top: 1px solid #ddd;">
+
+  <div class="current-settings">
+    <h3>Current Settings</h3>
+    <ul style="list-style: none; padding: 0;">
+      <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+        <strong>Email:</strong> <%= @user.email %>
+      </li>
+      <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+        <strong>Phone:</strong> <%= @user.phone_number.presence || 'Not set' %>
+      </li>
+      <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+        <strong>Notification Method:</strong> <%= @user.notification_method&.titleize || 'Both' %>
+      </li>
+      <li style="padding: 0.5rem 0;">
+        <strong>SMS Enabled:</strong> <%= @user.sms_enabled? ? 'Yes' : 'No' %>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .btn-primary:hover {
+    background: #0056b3 !important;
+  }
+</style>

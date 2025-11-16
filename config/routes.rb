@@ -25,6 +25,15 @@ Rails.application.routes.draw do
   get '/auth/failure', to: 'sessions#failure'
   delete '/logout', to: 'sessions#destroy'
 
+  # Settings routes
+  get '/settings', to: 'settings#show'
+  patch '/settings', to: 'settings#update'
+
+  # Event reminders routes
+  resources :events, only: [] do
+    resources :reminders, controller: 'event_reminders', only: [:index, :create, :destroy]
+  end
+
   # Webhook routes
   post '/webhooks/google_calendar', to: 'webhooks#google_calendar'
 
