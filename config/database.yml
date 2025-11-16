@@ -80,6 +80,4 @@ test:
 #
 production:
   <<: *default
-  database: cal_production
-  username: cal
-  password: <%= ENV["CAL_DATABASE_PASSWORD"] %>
+  url: <%= ENV.fetch("DATABASE_URL") { "postgresql://localhost/cal_production" } %>

@@ -36,6 +36,9 @@ module Cal
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # Tell Zeitwerk to ignore the API directory entirely (we manually load it in routes.rb)
+    Rails.autoloaders.main.ignore("#{root}/app/api")
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end
