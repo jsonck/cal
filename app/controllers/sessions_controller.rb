@@ -10,6 +10,9 @@ class SessionsController < ApplicationController
       # Trigger initial calendar sync
       CalendarSyncJob.perform_async(user.id)
 
+      # Set up webhook watch for real-time updates
+      SetupWatchJob.perform_async(user.id)
+
       redirect_to root_path, notice: "Successfully authenticated with Google Calendar!"
     else
       redirect_to root_path, alert: "Authentication failed. Please try again."

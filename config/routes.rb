@@ -25,6 +25,9 @@ Rails.application.routes.draw do
   get '/auth/failure', to: 'sessions#failure'
   delete '/logout', to: 'sessions#destroy'
 
+  # Webhook routes
+  post '/webhooks/google_calendar', to: 'webhooks#google_calendar'
+
   # Sidekiq Web UI
   # In production, protect this with authentication:
   # authenticate :user, ->(user) { user.admin? } do

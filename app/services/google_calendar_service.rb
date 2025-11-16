@@ -40,6 +40,63 @@ class GoogleCalendarService
     end
   end
 
+  def setup_watch(webhook_url)
+    return nil unless @service.authorization
+
+    begin
+      channel_id = SecureRandom.uuid
+      calendar_id = 'primary'
+
+      channel = Google::Apis::CalendarV3::Channel.new(
+        id: channel_id,
+        type: 'web_hook',
+        address: webhook_url
+      )
+
+      result = @service.watch_event(calendar_id, channel)
+
+      # Create watch record
+      @user.watches.create!(
+        channel_id: channel_id,
+        resource_id: result.resource_id,
+        expiration: Time.at(result.expiration.to_i / 1000)
+      )
+
+      Rails.logger.info "Set up watch for user #{@user.id}: #{channel_id}"
+      result
+    rescue => e
+      Rails.logger.error "Error setting up watch for user #{@user.id}: #{e.message}"
+      nil
+    end
+  end
+
+  def stop_watch(watch)
+    return unless @service.authorization
+
+    begin
+      @service.stop_channel(
+        Google::Apis::CalendarV3::Channel.new(
+          id: watch.channel_id,
+          resource_id: watch.resource_id
+        )
+      )
+      watch.deactivate!
+      Rails.logger.info "Stopped watch #{watch.channel_id} for user #{@user.id}"
+      true
+    rescue => e
+      Rails.logger.error "Error stopping watch #{watch.channel_id}: #{e.message}"
+      false
+    end
+  end
+
+  def renew_watch(old_watch, webhook_url)
+    # Stop the old watch
+    stop_watch(old_watch) if old_watch.active?
+
+    # Create a new watch
+    setup_watch(webhook_url)
+  end
+
   private
 
   def authorization

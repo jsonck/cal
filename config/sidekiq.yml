@@ -13,3 +13,8 @@
     cron: '0 */6 * * *' # Every 6 hours
     class: SyncAllCalendarsJob
     description: "Sync calendars for all users"
+
+  renew_watches:
+    cron: '0 0 * * *' # Daily at midnight
+    class: RenewWatchesJob
+    description: "Renew expiring webhook watches"

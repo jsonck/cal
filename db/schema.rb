@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_14_220001) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_16_145425) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,5 +40,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_14_220001) do
     t.index ["google_id"], name: "index_users_on_google_id", unique: true
   end
 
+  create_table "watches", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "channel_id", null: false
+    t.string "resource_id", null: false
+    t.datetime "expiration", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_watches_on_channel_id", unique: true
+    t.index ["expiration"], name: "index_watches_on_expiration"
+    t.index ["user_id", "active"], name: "index_watches_on_user_id_and_active"
+    t.index ["user_id"], name: "index_watches_on_user_id"
+  end
+
   add_foreign_key "calendar_events", "users"
+  add_foreign_key "watches", "users"
 end

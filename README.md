@@ -5,7 +5,8 @@ A Rails application that integrates with Google Calendar to automatically send e
 ## Features
 
 - OAuth2 authentication with Google Calendar (read-only access)
-- Automatic calendar synchronization every 6 hours
+- **Real-time webhook notifications** for instant calendar updates
+- Automatic calendar synchronization every 6 hours (backup)
 - Email reminders sent 1 hour before each event
 - RESTful API built with Grape
 - Background job processing with Sidekiq
@@ -62,6 +63,7 @@ Edit `.env` and add your credentials:
 ```
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
+APP_URL=https://yourdomain.com  # Required for webhooks (use ngrok for local dev)
 REDIS_URL=redis://localhost:6379/0
 SMTP_ADDRESS=smtp.gmail.com
 SMTP_PORT=587
@@ -70,6 +72,8 @@ SMTP_USERNAME=your_email@gmail.com
 SMTP_PASSWORD=your_app_password
 SMTP_FROM_EMAIL=noreply@yourdomain.com
 ```
+
+**Note**: For webhook support, `APP_URL` must be a publicly accessible HTTPS URL. See [WEBHOOK_SETUP.md](WEBHOOK_SETUP.md) for details.
 
 ### 4. Database Setup
 
@@ -104,9 +108,14 @@ Visit `http://localhost:3000` to access the application.
 
 1. **Authentication**: Users authenticate via Google OAuth2 with Calendar.readonly scope
 2. **Calendar Sync**: Upon authentication, the app syncs upcoming events (next 30 days)
-3. **Automatic Sync**: Every 6 hours, all user calendars are re-synced
-4. **Reminder Check**: Every 15 minutes, the app checks for events starting in 1 hour
-5. **Email Delivery**: Reminder emails are sent via background jobs
+3. **Webhook Setup**: A watch is created to receive real-time calendar change notifications
+4. **Real-time Updates**: When events change, Google sends a webhook notification triggering immediate sync
+5. **Automatic Sync**: Every 6 hours, all user calendars are re-synced (backup for failed webhooks)
+6. **Watch Renewal**: Daily job renews watches before they expire (~7 days)
+7. **Reminder Check**: Every 15 minutes, the app checks for events starting in 1 hour
+8. **Email Delivery**: Reminder emails are sent via background jobs
+
+For detailed webhook setup instructions, see [WEBHOOK_SETUP.md](WEBHOOK_SETUP.md).
 
 ## API Endpoints
 
@@ -128,6 +137,8 @@ The app includes a Grape API mounted at `/api/v1`:
 - `SyncAllCalendarsJob` - Syncs all users' calendars (runs every 6 hours)
 - `CheckRemindersJob` - Checks for events needing reminders (runs every 15 minutes)
 - `SendReminderJob` - Sends individual reminder emails
+- `SetupWatchJob` - Sets up webhook watch for a user
+- `RenewWatchesJob` - Renews expiring webhook watches (runs daily)
 
 ### Monitoring Sidekiq
 
