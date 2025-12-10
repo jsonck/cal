@@ -6,9 +6,18 @@ class User < ApplicationRecord
   validates :google_id, presence: true, uniqueness: true
   validates :phone_number, format: { with: /\A\+?[1-9]\d{1,14}\z/, message: "must be a valid phone number" }, allow_blank: true
   validates :notification_method, inclusion: { in: %w[email sms both] }, allow_nil: true
+  validate :sms_requires_consent
 
   def token_expired?
     token_expires_at.nil? || token_expires_at <= Time.current
+  end
+
+  private
+
+  def sms_requires_consent
+    if sms_enabled? && !sms_consent?
+      errors.add(:sms_enabled, "cannot be enabled without SMS consent. Please check the consent box above.")
+    end
   end
 
   def self.from_omniauth(auth)

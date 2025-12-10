@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_16_180113) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_10_144733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_16_180113) do
     t.string "phone_number"
     t.boolean "sms_enabled", default: false
     t.string "notification_method", default: "both"
+    t.boolean "sms_consent", default: false, null: false
+    t.datetime "sms_consent_date"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["google_id"], name: "index_users_on_google_id", unique: true
   end

@@ -12,6 +12,7 @@ class TwilioService
   def send_reminder(user, event)
     return unless user.phone_number.present?
     return unless user.sms_enabled?
+    return unless user.sms_consent?
 
     message_body = format_reminder_message(event)
 
