@@ -19,6 +19,11 @@ Rails.application.routes.draw do
   # Root path
   root "home#index"
 
+  # Static pages
+  get '/terms', to: 'pages#terms'
+  get '/privacy', to: 'pages#privacy'
+  get '/support', to: 'pages#support'
+
   # OAuth routes
   get '/auth/:provider/callback', to: 'sessions#create'
   post '/auth/:provider/callback', to: 'sessions#create'

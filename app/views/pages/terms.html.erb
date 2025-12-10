@@ -1,0 +1,197 @@
+<div class="container">
+  <div class="header">
+    <h1>Terms of Service</h1>
+    <p>Last updated: <%= Time.current.strftime("%B %d, %Y") %></p>
+  </div>
+
+  <div class="content-section">
+    <h2>1. Acceptance of Terms</h2>
+    <p>By accessing and using this Google Calendar Reminder application, you accept and agree to be bound by the terms and provision of this agreement.</p>
+
+    <h2>2. Description of Service</h2>
+    <p>Our service provides automated email and SMS reminders for events in your Google Calendar. The service includes:</p>
+    <ul>
+      <li>Integration with your Google Calendar via OAuth2</li>
+      <li>Customizable reminder notifications via email and SMS</li>
+      <li>Multiple reminders per calendar event</li>
+      <li>Real-time synchronization with your calendar</li>
+    </ul>
+
+    <h2>3. User Accounts</h2>
+    <p>To use our service, you must:</p>
+    <ul>
+      <li>Have a valid Google account</li>
+      <li>Grant read-only access to your Google Calendar</li>
+      <li>Provide accurate contact information (email and/or phone number) for notifications</li>
+      <li>Maintain the security of your account credentials</li>
+    </ul>
+
+    <h2>4. Privacy and Data</h2>
+    <p>We access your Google Calendar data solely to provide reminder services. Your calendar data is:</p>
+    <ul>
+      <li>Only accessed with your explicit permission</li>
+      <li>Used exclusively for sending you reminders</li>
+      <li>Not shared with third parties for marketing purposes</li>
+      <li>Stored securely and deleted upon account termination</li>
+    </ul>
+    <p>For more details, please review our <%= link_to "Privacy Policy", privacy_path %>.</p>
+
+    <h2>5. SMS and Email Notifications</h2>
+
+    <h3>5.1 SMS Consent and Terms</h3>
+    <p>By providing your mobile phone number and enabling SMS notifications in your account settings, you expressly consent to receive automated text message reminders from us at the phone number you provide. This consent is not required as a condition of using our service.</p>
+
+    <h3>5.2 Message Frequency</h3>
+    <p>The frequency of SMS messages you receive will vary based on:</p>
+    <ul>
+      <li>The number of events in your Google Calendar</li>
+      <li>Your configured reminder settings (you can set multiple reminders per event)</li>
+      <li>The timing preferences you select (e.g., 5 minutes before, 1 hour before, etc.)</li>
+    </ul>
+    <p>You have complete control over message frequency through your reminder configuration.</p>
+
+    <h3>5.3 Message and Data Rates</h3>
+    <p>Standard message and data rates may apply based on your mobile carrier's plan. Please check with your carrier for details about your messaging plan.</p>
+
+    <h3>5.4 Privacy and Sharing</h3>
+    <p>We will not share your mobile phone number with third parties or affiliates for marketing or promotional purposes. Your phone number is used exclusively to send you the calendar event reminders you have configured. For complete details, see our <%= link_to "Privacy Policy", privacy_path %>.</p>
+
+    <h3>5.5 Opt-Out Rights</h3>
+    <p>You may opt out of SMS notifications at any time by:</p>
+    <ul>
+      <li>Texting STOP in response to any SMS reminder</li>
+      <li>Visiting your Notification Settings and disabling SMS notifications</li>
+      <li>Removing your phone number from your account settings</li>
+    </ul>
+    <p>You can also text HELP to any message for assistance.</p>
+
+    <h3>5.6 Email Notifications</h3>
+    <p>Email notifications are sent to the email address associated with your Google account and can be enabled or disabled independently of SMS notifications.</p>
+
+    <h2>6. Acceptable Use</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Use the service for any unlawful purpose</li>
+      <li>Attempt to gain unauthorized access to our systems</li>
+      <li>Interfere with or disrupt the service</li>
+      <li>Use the service to spam or harass others</li>
+    </ul>
+
+    <h2>7. Service Availability</h2>
+    <p>We strive to provide reliable service, but we do not guarantee:</p>
+    <ul>
+      <li>Uninterrupted or error-free operation</li>
+      <li>That reminders will be delivered at the exact scheduled time</li>
+      <li>Availability during maintenance periods or outages</li>
+    </ul>
+
+    <h2>8. Limitation of Liability</h2>
+    <p>We are not responsible for:</p>
+    <ul>
+      <li>Missed events due to failed or delayed notifications</li>
+      <li>Any direct or indirect damages resulting from service use</li>
+      <li>Issues arising from third-party services (Google Calendar, SMS carriers)</li>
+    </ul>
+
+    <h2>9. Termination</h2>
+    <p>You may terminate your account at any time by revoking our access to your Google Calendar. We reserve the right to suspend or terminate accounts that violate these terms.</p>
+
+    <h2>10. Changes to Terms</h2>
+    <p>We may modify these terms at any time. Continued use of the service after changes constitutes acceptance of the modified terms.</p>
+
+    <h2>11. Contact</h2>
+    <p>For questions about these terms, please visit our <%= link_to "Support page", support_path %>.</p>
+  </div>
+
+  <div style="text-align: center; margin-top: 40px;">
+    <%= link_to "← Back to Home", root_path, class: "btn btn-secondary" %>
+  </div>
+</div>
+
+<style>
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .header h1 {
+    color: #4285f4;
+    margin-bottom: 10px;
+  }
+
+  .header p {
+    color: #666;
+    font-size: 14px;
+  }
+
+  .content-section {
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    line-height: 1.6;
+  }
+
+  .content-section h2 {
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 20px;
+  }
+
+  .content-section h2:first-child {
+    margin-top: 0;
+  }
+
+  .content-section p {
+    color: #555;
+    margin-bottom: 15px;
+  }
+
+  .content-section ul {
+    color: #555;
+    margin-bottom: 15px;
+    padding-left: 25px;
+  }
+
+  .content-section li {
+    margin-bottom: 8px;
+  }
+
+  .content-section a {
+    color: #4285f4;
+    text-decoration: none;
+  }
+
+  .content-section a:hover {
+    text-decoration: underline;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .btn-secondary {
+    background-color: #666;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #555;
+  }
+</style>

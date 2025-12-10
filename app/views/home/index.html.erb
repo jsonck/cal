@@ -120,14 +120,25 @@
       <h3>Features</h3>
       <ul>
         <li>📧 Email and SMS reminders</li>
-        <li>⏰ Customizable reminder times (1-60 minutes, 1-24 hours)</li>
-        <li>🔢 Up to 4 reminders per event</li>
+        <li>⏰ Customizable reminder times</li>
+        <li>🔢 Multiple reminders per event</li>
         <li>🔄 Real-time webhook updates</li>
         <li>🔒 Secure OAuth2 authentication with Google</li>
         <li>👁️ Read-only access to your calendar</li>
+        <li>🔐 Your data is never shared for marketing purposes</li>
       </ul>
     </div>
   <% end %>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <%= link_to "Privacy Policy", privacy_path %>
+      <span class="separator">•</span>
+      <%= link_to "Terms of Service", terms_path %>
+      <span class="separator">•</span>
+      <%= link_to "Support", support_path %>
+    </div>
+  </footer>
 </div>
 
 <style>
@@ -287,5 +298,36 @@
 
   .features ul {
     line-height: 2;
+  }
+
+  .footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .footer-links a:hover {
+    color: #4285f4;
+    text-decoration: underline;
+  }
+
+  .footer-links .separator {
+    color: #999;
+    font-size: 14px;
   }
 </style>
