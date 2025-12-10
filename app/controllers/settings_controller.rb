@@ -7,15 +7,18 @@ class SettingsController < ApplicationController
 
   def update
     @user = current_user
+    params_hash = user_params
 
-    # Handle SMS consent timestamp
-    if user_params[:sms_consent] == '1' && !@user.sms_consent?
+    # Handle SMS consent timestamp and auto-disable SMS if consent is removed
+    if params_hash[:sms_consent] == '1' && !@user.sms_consent?
       @user.sms_consent_date = Time.current
-    elsif user_params[:sms_consent] == '0'
+    elsif params_hash[:sms_consent] == '0' || params_hash[:sms_consent] == false
+      # When consent is removed, automatically disable SMS
       @user.sms_consent_date = nil
+      params_hash[:sms_enabled] = false
     end
 
-    if @user.update(user_params)
+    if @user.update(params_hash)
       redirect_to settings_path, notice: "Settings updated successfully!"
     else
       flash.now[:alert] = @user.errors.full_messages.join(', ')
